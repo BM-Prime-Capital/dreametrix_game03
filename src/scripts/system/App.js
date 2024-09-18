@@ -54,7 +54,8 @@ class Application {
     }
 
     start() {
-        this.scenes.start("GameOverScene");
+        //this.scenes.start("GameOverScene");
+        this.scenes.start("GameMenu");
     }
 }
 
