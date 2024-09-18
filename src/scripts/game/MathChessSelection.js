@@ -31,6 +31,10 @@ export class MathChessSelection extends Scene {
         const allGamesBtn = this.createButton("All Games", 0xF164CD, 30, 70);  // Couleur F164CD
         const ranksBtn = this.createButton("Ranks", 0x75BBFF, 200, 70);        // Couleur 75BBFF
 
+        allGamesBtn.on('pointerdown', () => {
+            App.scenes.start("GameMenu");  // Retour au menu principal
+        });
+        
         this.container.addChild(allGamesBtn);
         this.container.addChild(ranksBtn);
     }

@@ -30,6 +30,10 @@ export class MathChessGame extends Scene {
         const allGamesBtn = this.createButton("All Games", 0xF164CD, 30, 70);
         const ranksBtn = this.createButton("Ranks", 0x75BBFF, 200, 70);
 
+        allGamesBtn.on('pointerdown', () => {
+            App.scenes.start("GameMenu");  // Retour au menu principal
+        });
+
         this.container.addChild(allGamesBtn);
         this.container.addChild(ranksBtn);
     }
@@ -102,12 +106,109 @@ export class MathChessGame extends Scene {
     }      
     
     createChessBoard() {
-        const board = new PIXI.Sprite(App.res("field"));  // field.svg for the chessboard
-        board.position.set(window.innerWidth / 2 - board.width / 2, 300);
-        this.container.addChild(board);
+        const graphics = new PIXI.Graphics();
+        const startX = window.innerWidth / 2 - 175; // Centrer horizontalement
+        const startY = 300;
+        const cellSize = 70;
+    
+        // Dessiner les lignes du tableau
+        // Ligne supérieure
+        graphics.lineStyle(2, 0x000000); 
+        graphics.moveTo(startX, startY);
+        graphics.lineTo(startX + cellSize * 5, startY);
+    
+        // Ligne gauche
+        graphics.moveTo(startX, startY);
+        graphics.lineTo(startX, startY + cellSize * 5);
+    
+        // Ligne droite
+        graphics.moveTo(startX + cellSize * 5, startY);
+        graphics.lineTo(startX + cellSize * 5, startY + cellSize * 5);
+    
+        // Ligne inférieure
+        graphics.moveTo(startX, startY + cellSize * 5);
+        graphics.lineTo(startX + cellSize * 5, startY + cellSize * 5);
+    
+        // Lignes horizontales du cadre
+        graphics.moveTo(startX, startY + cellSize);
+        graphics.lineTo(startX + cellSize * 5, startY + cellSize);
+    
+        graphics.moveTo(startX, startY + cellSize * 4);
+        graphics.lineTo(startX + cellSize * 5, startY + cellSize * 4);
+    
+        // Lignes verticales du cadre
+        graphics.moveTo(startX + cellSize, startY);
+        graphics.lineTo(startX + cellSize, startY + cellSize * 5);
+    
+        graphics.moveTo(startX + cellSize * 4, startY);
+        graphics.lineTo(startX + cellSize * 4, startY + cellSize * 5);
+    
+        // Petites lignes pour séparer les symboles en haut
+        graphics.moveTo(startX + cellSize * 2, startY + cellSize);
+        graphics.lineTo(startX + cellSize * 2, startY + cellSize * -0);
+    
+        graphics.moveTo(startX + cellSize * 3, startY + cellSize);
+        graphics.lineTo(startX + cellSize * 3, startY + cellSize * -0);
+    
+        // Petites lignes pour séparer les symboles en bas
+        graphics.moveTo(startX + cellSize * 3, startY + cellSize *4);
+        graphics.lineTo(startX + cellSize * 3, startY + cellSize * 5);
 
-        // Suppression des question marks au-dessus du tableau
-        // Ils sont retirés de cette méthode
+        graphics.moveTo(startX + cellSize * 2, startY + cellSize *4);
+        graphics.lineTo(startX + cellSize * 2, startY + cellSize * 5);
+
+         // Petites lignes pour séparer les symboles sur la colonne Gauche
+        graphics.moveTo(startX + cellSize *1, startY + cellSize *3);
+        graphics.lineTo(startX + cellSize * 0, startY + cellSize * 3);
+
+        graphics.moveTo(startX + cellSize *1, startY + cellSize *2);
+        graphics.lineTo(startX + cellSize * 0, startY + cellSize * 2);
+
+        // Petites lignes pour séparer les symboles sur la colonne Droit
+        graphics.moveTo(startX + cellSize * 5, startY + cellSize *3);
+        graphics.lineTo(startX + cellSize * 4, startY + cellSize * 3);
+
+        graphics.moveTo(startX + cellSize *5, startY + cellSize *2);
+        graphics.lineTo(startX + cellSize * 4, startY + cellSize * 2);
+
+        this.container.addChild(graphics);
+    
+        // Définir le tableau avec les chiffres et les signes
+        const symbols = [
+            ['3', '-', '?', '=', '4'],  // Ligne 1
+            ['+', '', '', '', '?'],      // Ligne 2
+            ['1', '', '', '', '1'],      // Ligne 3
+            ['=', '', '', '', '='],      // Ligne 4
+            ['?', '+', '1', '=', '5']    // Ligne 5
+        ];
+    
+        // Ajouter les symboles
+        symbols.forEach((row, rowIndex) => {
+            row.forEach((symbol, colIndex) => {
+                const x = startX + colIndex * cellSize + cellSize / 2; // Centrer dans la case
+                const y = startY + rowIndex * cellSize + cellSize / 2; // Centrer dans la case
+    
+                const text = this.createDraggableText(symbol, 0x000000, x, y);
+                text.anchor.set(0.5); // Centrer le texte
+                this.container.addChild(text);
+            });
+        });
+    }
+    
+    // Fonction pour mélanger un tableau
+    shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]]; // Échange
+        }
+    }
+    
+    // Fonction pour mélanger un tableau
+    shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]]; // Échange
+        }
     }
 
     createDragAndDropArea() {
