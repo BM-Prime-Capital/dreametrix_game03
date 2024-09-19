@@ -2,34 +2,34 @@
 <html>
 <head>
   <title>Mon jeu</title>
+  
   <style>
-    /* styles de présentation */
+    button {
+      display: block; 
+      padding: 10px 20px;
+      margin: 20px auto;
+      cursor: pointer;
+    }
   </style>
+
 </head>
 <body>
 
-  <header>
-    <h1>Titre du jeu</h1>
-  </header>
-
-  <main>
-  
-    <p>
-      Texte de présentation du jeu
-    </p>
-
-    <button id="play-button">
-      Jouer
-    </button>
-
-  </main>
+  <button id="start-button">
+    Lancer le jeu
+  </button>
 
   <script>
 
-    const playButton = document.getElementById('play-button');
+    const startButton = document.getElementById('start-button');
 
-    playButton.addEventListener('click', () => {
-      location.href = 'app.html'; 
+    startButton.addEventListener('click', () => {
+
+      // Lancer le jeu en incluant le script App.js
+      const script = document.createElement('script');
+      script.src = 'src/scripts/system/App.js';
+      document.body.appendChild(script);
+
     });
 
   </script>
